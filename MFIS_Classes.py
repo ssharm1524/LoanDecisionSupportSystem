@@ -16,8 +16,8 @@ class FuzzySet:
     def printSet(self):
         print("var:       ", self.var)
         print("label:     ", self.label)
-        #print("x coord:   ", self.x)
-        #print("y coord:   ", self.y)
+        print("x coord:   ", self.x)
+        print("y coord:   ", self.y)
         print("memDegree: ", self.memDegree)
         print()
 
@@ -50,3 +50,8 @@ class Application:
         for elem in self.data:
             print(elem[0], " is ", elem[1])
         print()
+
+class ApplicationList(list):
+    def printApplicationList(self):
+        for app in self:
+            app.printApplication()
