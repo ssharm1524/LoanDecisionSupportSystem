@@ -43,12 +43,12 @@ class Rule:
 
 class Application:
     appId = ""          # application identifier (str)
-    data = []		# list of ValVarPair
+    data = {}		# dict of Var->Value
 
     def printApplication(self):
         print("App ID: ", self.appId)
-        for elem in self.data:
-            print(elem[0], " is ", elem[1])
+        for var,value in self.data.items():
+            print(var, " is ", value)
         print()
 
 class ApplicationList(list):

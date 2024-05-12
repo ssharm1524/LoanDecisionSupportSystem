@@ -63,9 +63,9 @@ def readApplicationsFile():
         elementsList = line.split(', ')
         app = Application()
         app.appId = elementsList[0]
-        app.data = []
+        app.data = {}
         for i in range(1, len(elementsList), 2):
-            app.data.append([elementsList[i], int(elementsList[i+1])])
+            app.data[elementsList[i]] = int(elementsList[i+1])
         applicationList.append(app)
         line = inputFile.readline()
     inputFile.close()
