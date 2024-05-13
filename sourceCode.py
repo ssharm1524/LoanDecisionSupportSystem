@@ -54,10 +54,6 @@ for application in applications:
   '''
   STEP 1: Transform inputs into membership degree of fuzzy sets
   - take application and find how much it belongs to each set
-    ex: 
-    Application 0001, Age, 35, IncomeLevel, 82, Assets, 38, Amount, 8, Job, 0, History, 1
-    -> { Age Vector = [.85,.10,0], Income Vector = [...], ...} 
-    in this example the age 35 is identified as 85% young, 10% middleaged, 0% old
   '''
   def transformInputs():
     #go through each Var=Value pair (EX: Age=35) in the application
@@ -77,11 +73,11 @@ for application in applications:
       rule.consequentX = riskFuzzySets[ruleConsequent].x
       rule.consequentY= [y * similarityStrength for y in riskFuzzySets[ruleConsequent].y]  # Scale Y by rule strength
   
-    """
-    Aggregates the consequences of applicable rules into one fuzzy set.
-    @param output_set_name: The specific output fuzzy set to aggregate.
-    @param applicable_rules: List of rules that apply to the output set.
-    """
+  """
+  Aggregates the consequences of applicable rules into one fuzzy set.
+  @param output_set_name: The specific output fuzzy set to aggregate.
+  @param applicable_rules: List of rules that apply to the output set.
+  """
   def aggregate(output_set_name, applicable_rules):
     aggregation = [0] * len(riskFuzzySets[output_set_name].x)
     
@@ -98,7 +94,8 @@ for application in applications:
           return 0  # To handle the case where all yValues are zero
       numerator = sum(x * y for x, y in zip(xValues, yValues))
       denominator = sum(yValues)
-      return numerator / denominator
+      centroid = numerator/denominator
+      return centroid
 
   
   transformInputs()
@@ -112,7 +109,7 @@ for application in applications:
   mediumRiskAggregation = aggregate("Risk=MediumR", mediumRiskRules)
   highRiskAggregation = aggregate("Risk=HighR", highRiskRules)
 
-  # Assuming you have aggregated results for each risk level:
+  # Assuming aggregated results for each risk level:
   lowRiskCrisp = defuzzify(riskFuzzySets['Risk=LowR'].x, lowRiskAggregation)
   mediumRiskCrisp = defuzzify(riskFuzzySets['Risk=MediumR'].x, mediumRiskAggregation)
   highRiskCrisp = defuzzify(riskFuzzySets['Risk=HighR'].x, highRiskAggregation)
@@ -125,7 +122,6 @@ for application in applications:
      highestRiskCategory = "medium risk"
   elif highRiskCrisp == highestRiskCategoryCrispValue:
      highestRiskCategory = "high risk"
-  
 
   with open('Results.txt', 'a') as results_file:
     results_file.write(f"Application {application.appId} is {lowRiskCrisp}% low risk, {mediumRiskCrisp}% medium risk, {highRiskCrisp}% high risk. Thus we identify this application as a {highestRiskCategory} application.\n")
